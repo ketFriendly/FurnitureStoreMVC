@@ -1,0 +1,33 @@
+﻿
+@model FurnitureStore.Models.AspNetUser
+
+@{
+    ViewBag.Title = "Edit User Failure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userId = -1;
+    if (Model != null)
+    {
+        userId = Model.UserID;
+    };
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <hgroup>
+            <h2>@ViewBag.Title.</h2>
+            <h3 class="text-danger">Unsuccessful user creation.</h3>
+            @if (userId != -1)
+            {
+                @Html.ActionLink("Back to User Edit", "Edit", new { id = userId })
+            }
+        </hgroup>
+    </div>
+</body>
+</html>
