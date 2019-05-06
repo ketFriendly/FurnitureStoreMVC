@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Failed to create the user.";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <hgroup>
+            <h2>@ViewBag.Title.</h2>
+            <h3 class="text-danger">Unsuccessful user creation.</h3>
+            @Html.ActionLink("Back to Create User", "Create")
+        </hgroup>
+    </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<FurnitureStore.Models.ReceiptModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<div align="left">
+    @using (Html.BeginForm("Index", "Receipts", FormMethod.Get))
+    {
+        <b> Select Search Option: </b>
+        <br />
+        @Html.RadioButton("option", "Date_time") <text>Date of purchase(mm/dd/yyyy)</text><br />
+        @Html.RadioButton("option", "Buyer") <text> Buyer </text><br />
+        @Html.RadioButton("option", "Store_Name")<text>Store</text><br />
+       
+        @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+    }
+</div>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Net_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Taxes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gross_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Buyer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Net_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Taxes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gross_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Buyer)
+        </td>
+        <td>
+            @Html.DisplayNameFor(model => model.Store_Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ReceiptID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptID })
+        </td>
+    </tr>
+}
+
+</table>

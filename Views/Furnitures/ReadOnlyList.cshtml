@@ -1,0 +1,90 @@
+﻿@model IEnumerable<FurnitureStore.Models.Furniture>
+     
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<div align="left">
+    @using (Html.BeginForm("ReadOnlyList", "Furnitures", FormMethod.Get))
+    {
+        <b> Select Search Option: </b><br />
+        @Html.RadioButton("option", "Furniture1") <text>Furniture Name</text><br />
+        @Html.RadioButton("option", "CountryOfOrigin") <text> Country </text><br />
+        @Html.RadioButton("option", "ProductionYear")<text>Production Year</text><br />
+        @Html.RadioButton("option", "PricePerItem")<text>Price</text><br />
+        @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+    }
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            Item Number
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Country of Origin
+        </th>
+        <th>
+            Production Year
+        </th>
+        <th>
+            Price per item
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        
+        <th>
+            Furniture type
+        </th>
+        <th>
+            Store
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Furniture1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryOfOrigin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductionYear.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PricePerItem)
+            </td>
+            <td>
+                @if (item.Image != null)
+                {
+                    <img src="@Url.Content(item.Image)" alt="image" width="47" height="40" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FurnitureType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store1.Store_Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.FurnitureID }) |
+                @Html.ActionLink("Add To Cart", "AddToCart", new { id = item.FurnitureID })
+            </td>
+        </tr>
+    }
+
+</table>

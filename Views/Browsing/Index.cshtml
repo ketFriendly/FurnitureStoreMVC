@@ -1,0 +1,16 @@
+﻿@model IEnumerable<FurnitureStore.Models.Store>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Choose a store you wish to browse </h2>
+<div align="left">
+    @using (Html.BeginForm("ReadOnlyList", "Browsing", FormMethod.Get))
+    {
+        <b> Select Search Option: </b><br />
+        @Html.DropDownList("StoreID", null, htmlAttributes: new { @class = "form-control" })
+        <input type="submit" name="submit" value="Search" />
+    }
+</div>

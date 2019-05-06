@@ -1,0 +1,85 @@
+﻿@model IEnumerable<FurnitureStore.Models.Store>
+
+@{
+    ViewBag.Title = "Furniture stores details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2>@ViewBag.Title</h2>
+<div align="left">
+    @using (Html.BeginForm("Index", "Stores", FormMethod.Get))
+    {
+        <b> Select Search Option: </b>
+        <br />
+        @Html.RadioButton("option", "Store_Name") <text>Store Name</text><br />
+        @Html.RadioButton("option", "Owner") <text> Owner </text><br />
+        @Html.RadioButton("option", "Address")<text>Address</text><br />
+        @Html.RadioButton("option", "TIN")<text>TIN</text><br />
+        @Html.RadioButton("option", "BankAccountNumber")<text>Bank Account Number</text><br />
+        @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+    }
+</div>
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Owner)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Website)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TIN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankAccountNumber)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Website)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankAccountNumber)
+            </td>
+           
+        </tr>
+    }
+
+</table>
