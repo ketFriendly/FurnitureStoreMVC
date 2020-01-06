@@ -45,7 +45,7 @@ namespace FurnitureStore.Controllers
             }
             else
             {
-                return RedirectToAction ("ReadOnlyList");
+                return RedirectToAction("ReadOnlyList","Stores");
             }
         }
         public ActionResult ReadOnlyList(string option, string search)
