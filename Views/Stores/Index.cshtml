@@ -7,20 +7,22 @@
 
 <br />
 <h2>@ViewBag.Title</h2>
+    
 <div align="left">
-@using (Html.BeginForm("Index", "Stores", FormMethod.Get))
-{
-    <b> Select Search Option: </b>
-    <br/>
-    @Html.RadioButton("option", "Store_Name") <text>Store Name</text><br />
-    @Html.RadioButton("option", "Owner") <text> Owner </text><br />
-    @Html.RadioButton("option", "Address")<text>Address</text><br />
-    @Html.RadioButton("option", "TIN")<text>TIN</text><br />
-    @Html.RadioButton("option", "BankAccountNumber")<text>Bank Account Number</text><br />
-    @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
-}
+    @using (Html.BeginForm("Index", "Stores", FormMethod.Get))
+    {
+        <b> Select Search Option: </b>
+        @Html.RadioButton("option" , "Store_Name", true) <text>Store Name &nbsp </text>
+        @Html.RadioButton("option", "Owner") <text> Owner &nbsp </text>
+        @Html.RadioButton("option", "Address")<text> Address &nbsp</text>
+        @Html.RadioButton("option", "TIN")<text> TIN &nbsp</text>
+        @Html.RadioButton("option", "BankAccountNumber")<text> Bank Account Number &nbsp</text>
+        <br /><br />
+        @Html.TextBox("search")
+        <input type="submit" name="submit" class="btn btn-info" value="Search" />
+    }
 </div>
-<br/>
+<br />
 <p align="left">
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -52,39 +54,47 @@
         </th>
         <th></th>
     </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr> <td colspan="9" align="center">There are no stores that match your search parameters </td></tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Website)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankAccountNumber)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.StoreID })
+                @Html.ActionLink("Details", "Details", new { id = item.StoreID })
+                @Html.ActionLink("Delete", "Delete", new { id = item.StoreID })
+            </td>
+        </tr>
+    }
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Store_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Owner)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Website)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TIN)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankAccountNumber)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StoreID }) 
-            @Html.ActionLink("Details", "Details", new { id=item.StoreID }) 
-            @Html.ActionLink("Delete", "Delete", new { id=item.StoreID })
-        </td>
-    </tr>
-}
 
 </table>

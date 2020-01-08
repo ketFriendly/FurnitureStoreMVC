@@ -5,20 +5,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<br />
+<h2>Available furniture</h2>
 
-<h2>Index</h2>
 <div align ="left">
 @using (Html.BeginForm("Index", "Furnitures", FormMethod.Get))
 {
-    <b> Select Search Option: </b><br />
-    @Html.RadioButton("option", "Furniture1") <text>Furniture Name</text><br/>
-    @Html.RadioButton("option", "CountryOfOrigin") <text> Country </text><br />
-    @Html.RadioButton("option", "ProductionYear")<text>Production Year</text><br />
-    @Html.RadioButton("option", "PricePerItem")<text>Price</text><br />
-    @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+    <b> Select Search Option: </b>
+    @Html.RadioButton("option", "Furniture1") <text>Furniture Name</text>
+    @Html.RadioButton("option", "CountryOfOrigin") <text> Country </text>
+    @Html.RadioButton("option", "ProductionYear")<text> Production Year</text>
+    @Html.RadioButton("option", "PricePerItem")<text> Price</text><br /><br />
+    @Html.TextBox("search") <input type="submit" name="submit" class="btn btn-info" value="Search" />
 }
 </div>
 <p>
+    <br/>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">

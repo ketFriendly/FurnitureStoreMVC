@@ -4,21 +4,22 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Index</h2>
+<br />
+<h2>Receipts</h2>
 <div align="left">
     @using (Html.BeginForm("Index", "Receipts", FormMethod.Get))
     {
         <b> Select Search Option: </b>
         <br />
         @Html.RadioButton("option", "Date_time") <text>Date of purchase(mm/dd/yyyy)</text><br />
-        @Html.RadioButton("option", "Buyer") <text> Buyer </text><br />
-        @Html.RadioButton("option", "Store_Name")<text>Store</text><br />
-       
-        @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+        @Html.RadioButton("option", "Buyer", htmlAttributes: new { @id = "checkboxDatepicker" }) <text> Buyer </text><br />
+        @*@Html.RadioButton("option", "Store_Name")<text>Store</text>*@<br />
+        @Html.TextBox("search")
+        <input type = "submit" name = "submit" class="btn btn-info" value="Search" />
     }
 </div>
 <p>
+    <br /><br />
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
@@ -38,38 +39,54 @@
         <th>
             @Html.DisplayNameFor(model => model.Buyer)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Store_Name)
-        </th>
+        @*<th>
+                Store Name
+            </th>*@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Net_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Taxes)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Gross_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Buyer)
-        </td>
-        <td>
-            @Html.DisplayNameFor(model => model.Store_Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ReceiptID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Net_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Taxes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gross_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date_time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Buyer)
+            </td>
+            @*<td>
+                    @Html.DisplayNameFor(model => model.Store_Name)
+                </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReceiptID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ReceiptID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ReceiptID })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+            $(function () {
+                $(".datepicker").datepicker({
+                    dateFormat: "mm/dd/yy"
+                });
+            });
+    </script>
+
+}

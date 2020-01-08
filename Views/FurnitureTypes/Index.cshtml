@@ -4,18 +4,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Index</h2>
+<br/>
+<h2>Types of furniture</h2>
 <div align ="left">
 @using (Html.BeginForm("Index", "FurnitureTypes", FormMethod.Get))
 {
-    <b> Select Search Option: </b><br />
-    @Html.RadioButton("option", "Name") <text>Furniture Type</text><br />
-   
-    @Html.TextBox("search") <input type="submit" name="submit" value="Search" />
+    <b> Search by furniture type: </b><br />
+    <br/>
+    @Html.TextBox("search") <input type="submit" name="submit" class="btn btn-info" value="Search" />
 }
 </div>
 <p>
+    <br />
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
@@ -28,21 +28,28 @@
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CategoryID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CategoryID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CategoryID })
-        </td>
-    </tr>
-}
+    @if (Model.Count() == 0)
+    {
+        <tr><td colspan="2" align="center" color="cyan"> There are no furniture types that match your search, please try a different type of furniture.</td></tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CategoryID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.CategoryID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CategoryID })
+                </td>
+            </tr>
+        }
+    }
 
 </table>

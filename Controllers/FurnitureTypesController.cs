@@ -17,11 +17,11 @@ namespace FurnitureStore.Controllers
         private FurnitureStoreEntities db = new FurnitureStoreEntities();
         
         // GET: FurnitureTypes
-        public ActionResult Index(string option, string search)
+        public ActionResult Index( string search)
         {
             if(User.IsInRole("Admin"))
             { 
-                if (option == "Name")
+                if (search != null)
                 {
                     return View(db.FurnitureTypes.Where(x => x.Name.ToUpper().Contains(search.ToUpper()) || search == null).ToList());
                 }
@@ -34,9 +34,9 @@ namespace FurnitureStore.Controllers
             
         }
         [Authorize(Roles="Buyer")]
-        public ActionResult ReadOnlyList(string option, string search)
+        public ActionResult ReadOnlyList(string search)
         {
-            if (option == "Name")
+            if (search != null)
             {
                 return View(db.FurnitureTypes.Where(x => x.Name.Contains(search) || search == null).ToList());
             }
