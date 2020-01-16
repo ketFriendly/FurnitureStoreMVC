@@ -60,3 +60,8 @@ input[type='file'] {
     
     /*display:inline-block;*/
 }
+.img_style {
+    height: 280px;
+    width: 280px;
+    border-radius: 0rem;
+}

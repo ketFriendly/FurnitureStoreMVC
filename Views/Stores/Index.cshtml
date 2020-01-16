@@ -87,9 +87,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BankAccountNumber)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.StoreID })
-                @Html.ActionLink("Details", "Details", new { id = item.StoreID })
+            <td width="174">
+                @Html.ActionLink("Edit", "Edit", new { id = item.StoreID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.StoreID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.StoreID })
             </td>
         </tr>

@@ -1,4 +1,4 @@
-﻿@model FurnitureStore.Models.Furniture
+﻿@model FurnitureStore.Models.FurnitureViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -7,7 +7,7 @@
 
 
 
-@{ WebImage photo = null;
+@*@{ WebImage photo = null;
     var newFileName = "";
     var imagePath = "";
 
@@ -23,10 +23,10 @@
             photo.Save(@"~\" + imagePath);
         }
     }
-}
+}*@
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Furnitures", FormMethod.Post, new { enctype = "multipart/form-data" } ))
 {
     @Html.AntiForgeryToken()
 
@@ -35,13 +35,13 @@
     <h4>Add new peice of furniture</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        <p class="control-label col-md-2">Item Number</p>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ItemNumber, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ItemNumber, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    @*<div class="form-group">
+            <p class="control-label col-md-2">Item Number</p>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ItemNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ItemNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
     <div class="form-group">
         <p class="control-label col-md-2">Furniture</p>
@@ -62,8 +62,8 @@
     <div class="form-group">
         <p class="control-label col-md-2">Production year (mm/dd/yyyy)</p>
         <div class="col-md-10">
-            @Html.EditorFor(model => model.ProductionYear, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("mm'/'dd'/'yyyy"), type = "datetime" } })
-            @Html.ValidationMessageFor(model => model.ProductionYear, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.ProductionYear, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("MM'/'dd'/'yyyy"), type = "datetime" } })
+            @Html.ValidationMessageFor(model => model.ProductionYear, "The field Production year must be a date.", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -91,26 +91,26 @@
         </div>
     </div>
     <div class="control-label col-md-2">
-        <div class="label">Upload an Image</div>
         <label class="input-file" for="Image">
             Upload image
-            <input type="file" name="Image" />
+            <input type="file" name="ImageFile" onchange="show(this)" required />
         </label>
     </div>
+    
+    <div class="control-label col-md-2"> <img id="user_img" class="img_style" /> </div>
 
+    <br/>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Create" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
 </div>
-    @*</div>*@
+   
     }
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
@@ -120,9 +120,19 @@
         <script>
             $(function () {
                 $(".datepicker").datepicker({
-                    dateFormat: "mm/dd/yy"
+                    dateFormat: "MM/dd/yy"
                 });
             });
         </script>
-
+        <script type="text/javascript">  
+           function show(input) {  
+              if (input.files && input.files[0]) {  
+              var filerdr = new FileReader();  
+              filerdr.onload = function (e) {  
+                 $('#user_img').attr('src', e.target.result);  
+              }  
+              filerdr.readAsDataURL(input.files[0]);  
+           }  
+        }  
+        </script>  
     }

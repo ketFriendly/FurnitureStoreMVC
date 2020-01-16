@@ -225,6 +225,7 @@
     <Compile Include="Models\FurnitureType.cs">
       <DependentUpon>FurnitureStore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FurnitureViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Item.cs">
       <DependentUpon>FurnitureStore.tt</DependentUpon>
