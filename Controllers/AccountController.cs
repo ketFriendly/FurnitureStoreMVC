@@ -499,19 +499,19 @@ namespace FurnitureStore.Controllers
         {
             if (option == "Name") 
             {  
-                return View(db.AspNetUsers.Where(x => x.Name.Contains(search) || search == null).ToList());  
+                return View(db.AspNetUsers.Where(x => x.Name.Contains(search) || search == "").ToList());  
             } 
             else if (option == "Surname") 
             {  
-                return View(db.AspNetUsers.Where(x => x.Surname.Contains(search) || search == null).ToList());  
+                return View(db.AspNetUsers.Where(x => x.Surname.Contains(search) || search == "").ToList());  
             } 
             else if(option == "Address")
             {
-                return View(db.AspNetUsers.Where(x => x.Address.Contains(search) || search == null).ToList());  
+                return View(db.AspNetUsers.Where(x => x.Address.Contains(search) || search == "").ToList());  
             }
             else if (option == "Email")
             {
-                return View(db.AspNetUsers.Where(x => x.Email.Contains(search) || search == null).ToList());
+                return View(db.AspNetUsers.Where(x => x.Email.Contains(search) || search == "").ToList());
             }
            
             return View(db.AspNetUsers.ToList());
@@ -546,23 +546,26 @@ namespace FurnitureStore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Create([Bind(Include = "Email,UserName,PasswordHash,Name,Surname,Address,Id")] AspNetUser user)
+        public async Task<ActionResult> Create([Bind(Include = "Email,UserName,Password,ConfirmPassword,Name,Surname,Address,Id")] AdminRegisterViewModel user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    user.RoleID = user.Id;
+                    //user.RoleID = user.Id;
 
-                    var userApp = new ApplicationUser { UserName = user.UserName, Email = user.Email };
-                    var result = await UserManager.CreateAsync(userApp, user.PasswordHash);
+                    var userApp = new ApplicationUser { UserName = user.Username, Email = user.Email };
+                    var result = await UserManager.CreateAsync(userApp, user.Password);
 
                     if (result.Succeeded)
                     {
-                        var newUser = db.AspNetUsers.FirstOrDefault(x => x.UserName == user.UserName);
+                        var newUser = db.AspNetUsers.FirstOrDefault(x => x.UserName == user.Username);
 
-                        newUser.AspNetRoles.Add(db.AspNetRoles.FirstOrDefault(x => x.Id == user.RoleID));
-                        newUser.RoleID = user.RoleID;
+                        newUser.AspNetRoles.Add(db.AspNetRoles.FirstOrDefault(x => x.Id == user.Id));
+                        newUser.RoleID = user.Id ;
+                        newUser.Name = user.Name;
+                        newUser.Surname = user.Surname;
+                        newUser.Address = user.Address;
 
                         db.Entry(newUser).State = EntityState.Modified;
                         db.SaveChanges();
@@ -574,7 +577,7 @@ namespace FurnitureStore.Controllers
             {
                 return RedirectToAction("Failure");
             }
-            ViewBag.Id = new SelectList(db.AspNetRoles, "Id", "Name", user.RoleID);
+            ViewBag.Id = new SelectList(db.AspNetRoles, "Id", "Name", user.Id);
             return View(user);
         }
 
@@ -583,7 +586,7 @@ namespace FurnitureStore.Controllers
         public ActionResult Edit(string id)
         {
             AspNetUser user = null;
-
+            EditUserViewModel editUserViewModel = new EditUserViewModel();
             try
             {
                 if (id == null)
@@ -601,8 +604,15 @@ namespace FurnitureStore.Controllers
             {
                 return RedirectToAction("EditFailure");
             }
-            ViewBag.RoleID = new SelectList(db.AspNetRoles, "Id", "Name");
-            return View(user);
+            editUserViewModel.Name = user.Name;
+            editUserViewModel.Surname = user.Surname;
+            editUserViewModel.Username = user.UserName;
+            editUserViewModel.Address = user.Address;
+            editUserViewModel.Email = user.Email;
+            editUserViewModel.Password = user.PasswordHash;
+            editUserViewModel.ConfirmPassword = user.PasswordHash;
+            ViewBag.RoleId = new SelectList(db.AspNetRoles, "Id", "Name");
+            return View(editUserViewModel);
         }
 
         // POST: Users/Edit/5
@@ -611,40 +621,57 @@ namespace FurnitureStore.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AspNetUser user)
+        public async Task<ActionResult> Edit([Bind(Include = "Email,UserName,Password,ConfirmPassword,Name,Surname,Address,RoleId")] EditUserViewModel user)
         {
+            var idFromRoute = Url.RequestContext.RouteData.Values["id"].ToString();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var newUser = db.AspNetUsers.FirstOrDefault(x => x.UserName == user.UserName);
+                    var managerUser = UserManager.FindById(idFromRoute);
+                    var newUser = db.AspNetUsers.FirstOrDefault(x => x.Id == idFromRoute);
+                    var oldRole = newUser.AspNetRoles.FirstOrDefault(x => x.AspNetUsers.Contains(newUser));
+                    var oldRoles = newUser.AspNetRoles.All(x => x.AspNetUsers.Contains(newUser));
+                    AspNetRole newRole = null;
 
-                    UserManager.RemoveFromRole(user.Id, newUser.AspNetRoles.FirstOrDefault().Name);
-
-                    var newRole = db.AspNetRoles.FirstOrDefault(x => x.Id == user.RoleID);
-
+                    if (oldRole.Id != user.RoleId)
+                    {
+                        if(user.RoleId != null)
+                        {
+                            var removedFromRole = await UserManager.RemoveFromRoleAsync(newUser.Id, oldRole.Name);
+                            //newUser.AspNetRoles.Remove(oldRole);
+                            newRole = db.AspNetRoles.FirstOrDefault(x => x.Id == user.RoleId);
+                            var addedToRole = await UserManager.AddToRoleAsync(newUser.Id, newRole.Name);
+                            //newUser.AspNetRoles.Add(db.AspNetRoles.FirstOrDefault(x => x.Id == user.RoleId));
+                            
+                        } 
+                    }
+                    if (user.Password != null)
+                    {
+                        var removeResult = UserManager.RemovePassword(idFromRoute);
+                        string hashedPassword = UserManager.PasswordHasher.HashPassword(user.Password);
+                        var addResult = UserManager.AddPassword(idFromRoute, hashedPassword);
+                        newUser.PasswordHash = hashedPassword;
+                    }
                     newUser.Email = user.Email;
-                    newUser.UserName = user.UserName;
-                    newUser.PasswordHash = user.PasswordHash;
+                    newUser.UserName = user.Username;
                     newUser.Name = user.Name;
                     newUser.Surname = user.Surname;
                     newUser.Address = user.Address;
-                    newUser.RoleID = user.RoleID;
+                    
 
                     db.Entry(newUser).State = EntityState.Modified;
                     db.SaveChanges();
-
-                    UserManager.AddToRole(newUser.Id, newRole.Name);
 
                     return RedirectToAction("Index");
                 }
             }
             catch
             {
-                return RedirectToAction("Failure");
+                return RedirectToAction("EditFailure");
             }
 
-            ViewBag.Id = new SelectList(db.AspNetRoles, "Id", "Name", user.RoleID);
+            ViewBag.Id = new SelectList(db.AspNetRoles, "Id", "Name", user.RoleId);
             return View(user);
         }
 

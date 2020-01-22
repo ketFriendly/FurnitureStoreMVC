@@ -97,7 +97,7 @@
         </label>
     </div>
     
-    <div class="control-label col-md-2"> <img id="user_img" class="img_style" /> </div>
+    <div class="control-label col-md-2"> <img id="user_img"/> </div>
 
     <br/>
 
@@ -129,7 +129,7 @@
               if (input.files && input.files[0]) {  
               var filerdr = new FileReader();  
               filerdr.onload = function (e) {  
-                 $('#user_img').attr('src', e.target.result);  
+                  $('#user_img').attr('src', e.target.result).addClass('img_style');
               }  
               filerdr.readAsDataURL(input.files[0]);  
            }  
